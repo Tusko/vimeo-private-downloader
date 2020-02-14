@@ -15,4 +15,6 @@ To download videos you have to:
 5.  Run: node vimeo-downloader.js
 6.  Wait for console output `🌈 List finished`
 
-Also, you can combine the m4v and m4a files with [mkvmerge](https://mkvtoolnix.download/)
+Also, you can combine the m4v and m4a files with [ffmpeg](https://www.ffmpeg.org/)
+
+example script file is `runnner.sh` filenames in same format and run in terminal `sh ./runnner.sh`
