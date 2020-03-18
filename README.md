@@ -17,5 +17,5 @@ To download videos you have to:
 
 Also, you can combine the m4v and m4a files with [ffmpeg](https://www.ffmpeg.org/)
 
-I've added an example bash script `runnner.sh` to bulk merge video parts.
-Fill your filenames in same format and run in terminal `sh ./runnner.sh`
+I've added an example bash script [runnner.sh](https://github.com/Tusko/vimeo-private-downloader/blob/master/runnner.sh) to bulk combine and conver video/audio parts to `mp4` file.
+Enter your filenames in same format and run in terminal `sh ./runnner.sh`
