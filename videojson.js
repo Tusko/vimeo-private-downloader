@@ -1,8 +1,8 @@
 const list = [
-//  {
-//    name: '1. Introduction',
-//    url: 'https://60vod-adaptive.akamaized.net/exp=1581673348~acl=%2F290272859%2F%2A~hmac=85ab02c8b54d38be126dbedb3470a5b46971c475f82e17bde7114a93f652e01f/290272859/sep/video/1099558424,1099558420,1099557256,1099557251/master.json?base64_init=1'
-//  },
+ {
+   name: '1. Introduction',
+   url: 'https://60vod-adaptive.akamaized.net/exp=1584616359~acl=%2F290272859%2F%2A~hmac=d8b0da041d43093909c4f58cf017b6ce204f085f18435b1c1ed60b6ca3708dbc/290272859/sep/video/1099558424,1099558420,1099557256,1099557251/master.json?base64_init=1'
+ },
 //  {
 //    name: '2.1. Интро',
 //    url: 'https://117vod-adaptive.akamaized.net/exp=1581671870~acl=%2F207987916%2F%2A~hmac=74fe7a27bee712a90aeb8f0e34b089002adbe65040d757df8e7ebf60ee1f862a/207987916/sep/video/710158253,710158251,710158247,710158246/master.json?base64_init=1'
@@ -55,10 +55,10 @@ const list = [
 //    name: '3.7. Ценообразование (4. Ценообразование для продвижения)',
 //    url: 'https://186vod-adaptive.akamaized.net/exp=1581674178~acl=%2F207987985%2F%2A~hmac=a3308955322b7be62e0b7aada1bcff2c0e0344e5858e4946370092467b477854/207987985/sep/video/710158543,710158540,710158539,710158537/master.json?base64_init=1'
 //  },
-  {
-    name: '3.8. Ценообразование (5. Условия оплаты)',
-    url: 'https://187vod-adaptive.akamaized.net/exp=1581686305~acl=%2F207987986%2F%2A~hmac=1f9e72ad60a1056ff02247690cbf50605ea29a6b850426d59cf0609caa28d335/207987986/sep/video/710580598,710158518,710158516,710158513/master.json?base64_init=1'
-  },
+  // {
+  //   name: '3.8. Ценообразование (5. Условия оплаты)',
+  //   url: 'https://187vod-adaptive.akamaized.net/exp=1581686305~acl=%2F207987986%2F%2A~hmac=1f9e72ad60a1056ff02247690cbf50605ea29a6b850426d59cf0609caa28d335/207987986/sep/video/710580598,710158518,710158516,710158513/master.json?base64_init=1'
+  // },
 //  {
 //    name: '3.9. Внедрение максимизаторов прибыли',
 //    url: 'https://190vod-adaptive.akamaized.net/exp=1581672258~acl=%2F207987989%2F%2A~hmac=539a91587117c00501dc9140af23bfe0dff59a0dcb45ae7db786ecf771152e79/207987989/sep/video/710158500,710158499,710158498,710158497/master.json?base64_init=1'

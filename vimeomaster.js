@@ -75,7 +75,7 @@ function loadVideo(num) {
 }
 
 function processFile(type, baseUrl, initData, segments, filename, cb) {
-  if (fs.existsSync(filename)) {
+  if (fs.existsSync('./parts/' + filename)) {
     log("⚠️", ` ${filename} - ${type} already exists`);
     cb();
   }
