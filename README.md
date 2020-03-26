@@ -14,7 +14,7 @@ To download videos you have to:
 2.  Start the video (or move mouse over the video).
 3.  In the "Network" tab, locate the load of the "master.json" file, copy its full URL.
 4.  Fill in `url` and `name`(using as filename) fields in `videojson.js` file
-5.  Run: node vimeo-downloader.js
+5.  Run: `node vimeomaster.js`
 6.  Wait for console output `🌈 List finished`
 
 ## Combine and convert
