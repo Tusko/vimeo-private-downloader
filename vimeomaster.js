@@ -75,7 +75,8 @@ function loadVideo(num) {
 }
 
 function processFile(type, baseUrl, initData, segments, filename, cb) {
-  if (fs.existsSync('./parts/' + filename)) {
+  const filePath = `./parts/${filename}`;
+  if (fs.existsSync(filePath)) {
     log("⚠️", ` ${filename} - ${type} already exists`);
     cb();
   }
@@ -83,13 +84,13 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
   const segmentsUrl = segments.map(seg => baseUrl + seg.url);
 
   const initBuffer = Buffer.from(initData, "base64");
-  fs.writeFileSync(filename, initBuffer);
+  fs.writeFileSync(filePath, initBuffer);
 
-  const output = fs.createWriteStream(filename, {
+  const output = fs.createWriteStream(filePath, {
     flags: "a"
   });
 
-  combineSegments(type, 0, segmentsUrl, output, filename, err => {
+  combineSegments(type, 0, segmentsUrl, output, filePath, err => {
     if (err) {
       log("⚠️", ` ${err}`);
     }

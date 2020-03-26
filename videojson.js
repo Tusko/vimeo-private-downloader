@@ -1,7 +1,7 @@
 const list = [
  {
-   name: '1. Introduction',
-   url: 'https://60vod-adaptive.akamaized.net/exp=1584616359~acl=%2F290272859%2F%2A~hmac=d8b0da041d43093909c4f58cf017b6ce204f085f18435b1c1ed60b6ca3708dbc/290272859/sep/video/1099558424,1099558420,1099557256,1099557251/master.json?base64_init=1'
+   name: '1. Introduction "Double Quotes" \'SingleQuotes\' \\ can I use it?',
+   url: 'https://60vod-adaptive.akamaized.net/exp=1585247356~acl=%2F290272859%2F%2A~hmac=9e480e2a6d726afd2f54bdacd7c959c00fb8d1fb1d6225aaf73b1205bef6eb5b/290272859/sep/video/1099558424,1099558420,1099557256,1099557251/master.json?base64_init=1'
  },
 //  {
 //    name: '2.1. Интро',
