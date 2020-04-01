@@ -5,72 +5,60 @@ const log = (...args) => console.log("→", ...args);
 const list = require("./videojson.js");
 const promises = [];
 
-list.forEach((el, i) => {
-  if (!el.name && !el.url) return;
-
-  promises.push(loadVideo(i));
-});
-
-Promise.all(promises).then(function(values) {
-  log("🌈", ` List finished`);
-});
-
-function loadVideo(num) {
+function loadVideo(num, cb) {
   let masterUrl = list[num].url;
   if (!masterUrl.endsWith("?base64_init=1")) {
     masterUrl += "?base64_init=1";
   }
 
-  return new Promise(resolve => {
-    getJson(masterUrl, (err, json) => {
-      if (err) {
-        log("⚠️", ` ${err}`);
-      }
+  getJson(masterUrl, (err, json) => {
+    if (err) {
+      return cb(err);
+    }
 
-      const videoData = json.video
-        .sort((v1, v2) => v1.avg_bitrate - v2.avg_bitrate)
-        .pop();
-      const audioData = json.audio
-        .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
-        .pop();
+    const videoData = json.video
+      .sort((v1, v2) => v1.avg_bitrate - v2.avg_bitrate)
+      .pop();
+    const audioData = json.audio
+      .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
+      .pop();
 
-      const videoBaseUrl = url.resolve(
-        url.resolve(masterUrl, json.base_url),
-        videoData.base_url
-      );
-      const audioBaseUrl = url.resolve(
-        url.resolve(masterUrl, json.base_url),
-        audioData.base_url
-      );
+    const videoBaseUrl = url.resolve(
+      url.resolve(masterUrl, json.base_url),
+      videoData.base_url
+    );
+    const audioBaseUrl = url.resolve(
+      url.resolve(masterUrl, json.base_url),
+      audioData.base_url
+    );
 
-      processFile(
-        "video",
-        videoBaseUrl,
-        videoData.init_segment,
-        videoData.segments,
-        list[num].name + ".m4v",
-        err => {
-          if (err) {
-            log("⚠️", ` ${err}`);
-          }
-
-          processFile(
-            "audio",
-            audioBaseUrl,
-            audioData.init_segment,
-            audioData.segments,
-            list[num].name + ".m4a",
-            err => {
-              if (err) {
-                log("⚠️", ` ${err}`);
-              }
-
-              resolve(num + 1);
-            }
-          );
+    processFile(
+      "video",
+      videoBaseUrl,
+      videoData.init_segment,
+      videoData.segments,
+      list[num].name + ".m4v",
+      err => {
+        if (err) {
+          return cb(err);
         }
-      );
-    });
+
+        processFile(
+          "audio",
+          audioBaseUrl,
+          audioData.init_segment,
+          audioData.segments,
+          list[num].name + ".m4a",
+          err => {
+            if (err) {
+              return cb(err);
+            }
+
+            cb(null, num + 1);
+          }
+        );
+      }
+    );
   });
 }
 
@@ -78,7 +66,7 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
   const filePath = `./parts/${filename}`;
   if (fs.existsSync(filePath)) {
     log("⚠️", ` ${filename} - ${type} already exists`);
-    cb();
+    return cb();
   }
 
   const segmentsUrl = segments.map(seg => baseUrl + seg.url);
@@ -138,3 +126,20 @@ function getJson(url, cb) {
       cb(e);
     });
 }
+
+function initJs(n = 0) {
+  if (!list[n] || (!list[n].name && !list[n].url)) return;
+
+  loadVideo(n, (err, num) => {
+    if (err) {
+      log("⚠️", ` ${err}`);
+      return;
+    }
+
+    if (list[num]) {
+      initJs(num);
+    }
+  });
+}
+
+initJs();
