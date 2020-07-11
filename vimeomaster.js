@@ -64,7 +64,7 @@ function loadVideo(num, cb) {
 
 function processFile(type, baseUrl, initData, segments, filename, cb) {
   const filePath = `./parts/${filename}`;
-  const downloadingFlag = `./parts/.${filename}~`
+  const downloadingFlag = `./parts/.${filename}~`;
   
   if(fs.existsSync(downloadingFlag)) {
     log("⚠️", ` ${filename} - ${type} is incomplete, restarting the download`);
@@ -112,7 +112,7 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
       res.on("data", d => output.write(d));
 
       res.on("end", () =>
-        combineSegments(type, i + 1, segmentsUrl, output, filename, cb)
+        combineSegments(type, i + 1, segmentsUrl, output, filename, downloadingFlag, cb)
       );
     })
     .on("error", e => {
