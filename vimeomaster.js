@@ -134,8 +134,8 @@ function getJson(url, cb) {
     });
 
   req.setTimeout(7000, function () {
-    console.log("Timeout. Retrying");
-    combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb)
+    log("⚠️", 'Timeout. Retrying');
+    combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb);
   });
 }
 
