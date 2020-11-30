@@ -17,20 +17,20 @@ function loadVideo(num, cb) {
     }
 
     const videoData = json.video
-      .sort((v1, v2) => v1.avg_bitrate - v2.avg_bitrate)
-      .pop();
+    .sort((v1, v2) => v1.avg_bitrate - v2.avg_bitrate)
+    .pop();
     const audioData = json.audio
-      .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
-      .pop();
+    .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
+    .pop();
 
     const videoBaseUrl = url.resolve(
       url.resolve(masterUrl, json.base_url),
       videoData.base_url
-    );
+      );
     const audioBaseUrl = url.resolve(
       url.resolve(masterUrl, json.base_url),
       audioData.base_url
-    );
+      );
 
     processFile(
       "video",
@@ -56,9 +56,9 @@ function loadVideo(num, cb) {
 
             cb(null, num + 1);
           }
-        );
+          );
       }
-    );
+      );
   });
 }
 
@@ -105,33 +105,37 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
     "📦",
     type === "video" ? "📹" : "🎧",
     `Downloading ${type} segment ${i}/${segmentsUrl.length} of ${filename}`
-  );
+    );
 
-  https
-    .get(segmentsUrl[i], res => {
-      res.on("data", d => output.write(d));
+  let req = https
+  .get(segmentsUrl[i], res => {
+    res.on("data", d => output.write(d));
 
-      res.on("end", () =>
-        combineSegments(type, i + 1, segmentsUrl, output, filename, downloadingFlag, cb)
+    res.on("end", () =>
+      combineSegments(type, i + 1, segmentsUrl, output, filename, downloadingFlag, cb)
       );
-    })
-    .on("error", e => {
-      cb(e);
-    });
+  })
+  .on("error", e => {
+    cb(e);
+  });
+  req.setTimeout(7000, function () {
+    console.log("Timeout. Retrying");
+    combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb)
+  })
 }
 
 function getJson(url, cb) {
   let data = "";
 
   https
-    .get(url, res => {
-      res.on("data", d => (data += d));
+  .get(url, res => {
+    res.on("data", d => (data += d));
 
-      res.on("end", () => cb(null, JSON.parse(data)));
-    })
-    .on("error", e => {
-      cb(e);
-    });
+    res.on("end", () => cb(null, JSON.parse(data)));
+  })
+  .on("error", e => {
+    cb(e);
+  });
 }
 
 function initJs(n = 0) {
