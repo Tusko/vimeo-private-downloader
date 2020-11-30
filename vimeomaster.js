@@ -9,30 +9,30 @@ function loadVideo(num, cb) {
   let masterUrl = list[num].url;
   if (!masterUrl.endsWith("?base64_init=1")) {
     masterUrl += "?base64_init=1";
-}
-
-getJson(masterUrl, (err, json) => {
-    if (err) {
-      return cb(err);
   }
 
-  const videoData = json.video
-  .sort((v1, v2) => v1.avg_bitrate - v2.avg_bitrate)
-  .pop();
-  const audioData = json.audio
-  .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
-  .pop();
+  getJson(masterUrl, (err, json) => {
+    if (err) {
+      return cb(err);
+    }
 
-  const videoBaseUrl = url.resolve(
+    const videoData = json.video
+      .sort((v1, v2) => v1.avg_bitrate - v2.avg_bitrate)
+      .pop();
+    const audioData = json.audio
+      .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
+      .pop();
+
+    const videoBaseUrl = url.resolve(
       url.resolve(masterUrl, json.base_url),
       videoData.base_url
-      );
-  const audioBaseUrl = url.resolve(
+    );
+    const audioBaseUrl = url.resolve(
       url.resolve(masterUrl, json.base_url),
       audioData.base_url
-      );
+    );
 
-  processFile(
+    processFile(
       "video",
       videoBaseUrl,
       videoData.init_segment,
@@ -41,9 +41,9 @@ getJson(masterUrl, (err, json) => {
       err => {
         if (err) {
           return cb(err);
-      }
+        }
 
-      processFile(
+        processFile(
           "audio",
           audioBaseUrl,
           audioData.init_segment,
@@ -52,14 +52,14 @@ getJson(masterUrl, (err, json) => {
           err => {
             if (err) {
               return cb(err);
-          }
+            }
 
-          cb(null, num + 1);
+            cb(null, num + 1);
+          }
+        );
       }
-      );
-  }
-  );
-});
+    );
+  });
 }
 
 function processFile(type, baseUrl, initData, segments, filename, cb) {
@@ -68,30 +68,30 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
   
   if(fs.existsSync(downloadingFlag)) {
     log("⚠️", ` ${filename} - ${type} is incomplete, restarting the download`);
-} else if (fs.existsSync(filePath)) {
+  } else if (fs.existsSync(filePath)) {
     log("⚠️", ` ${filename} - ${type} already exists`);
     return cb();
-} else {
+  } else {
     fs.writeFileSync(downloadingFlag, '');
-}
-
-const segmentsUrl = segments.map(seg => baseUrl + seg.url);
-
-const initBuffer = Buffer.from(initData, "base64");
-fs.writeFileSync(filePath, initBuffer);
-
-const output = fs.createWriteStream(filePath, {
-    flags: "a"
-});
-
-combineSegments(type, 0, segmentsUrl, output, filePath, downloadingFlag, err => {
-    if (err) {
-      log("⚠️", ` ${err}`);
   }
 
-  output.end();
-  cb();
-});
+  const segmentsUrl = segments.map(seg => baseUrl + seg.url);
+
+  const initBuffer = Buffer.from(initData, "base64");
+  fs.writeFileSync(filePath, initBuffer);
+
+  const output = fs.createWriteStream(filePath, {
+    flags: "a"
+  });
+
+  combineSegments(type, 0, segmentsUrl, output, filePath, downloadingFlag, err => {
+    if (err) {
+      log("⚠️", ` ${err}`);
+    }
+
+    output.end();
+    cb();
+  });
 }
 
 function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb) {
@@ -99,43 +99,44 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
     fs.unlinkSync(downloadingFlag);
     log("🏁", ` ${filename} - ${type} done`);
     return cb();
-}
+  }
 
-log(
+  log(
     "📦",
     type === "video" ? "📹" : "🎧",
     `Downloading ${type} segment ${i}/${segmentsUrl.length} of ${filename}`
-    );
+  );
 
-let req = https
-.get(segmentsUrl[i], res => {
-    res.on("data", d => output.write(d));
+  https
+    .get(segmentsUrl[i], res => {
+      res.on("data", d => output.write(d));
 
-    res.on("end", () =>
-      combineSegments(type, i + 1, segmentsUrl, output, filename, downloadingFlag, cb)
+      res.on("end", () =>
+        combineSegments(type, i + 1, segmentsUrl, output, filename, downloadingFlag, cb)
       );
-})
-.on("error", e => {
-    cb(e);
-});
-req.setTimeout(7000, function () {
-    console.log("Timeout. Retrying");
-    combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb)
-})
+    })
+    .on("error", e => {
+      cb(e);
+    });
 }
 
 function getJson(url, cb) {
   let data = "";
 
-  https
-  .get(url, res => {
-    res.on("data", d => (data += d));
+  let req = https
+    .get(url, res => {
+      res.on("data", d => (data += d));
 
-    res.on("end", () => cb(null, JSON.parse(data)));
-})
-  .on("error", e => {
-    cb(e);
-});
+      res.on("end", () => cb(null, JSON.parse(data)));
+    })
+    .on("error", e => {
+      cb(e);
+    });
+
+  req.setTimeout(7000, function () {
+    console.log("Timeout. Retrying");
+    combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb)
+  });
 }
 
 function initJs(n = 0) {
@@ -145,12 +146,12 @@ function initJs(n = 0) {
     if (err) {
       log("⚠️", ` ${err}`);
       return;
-  }
+    }
 
-  if (list[num]) {
+    if (list[num]) {
       initJs(num);
-  }
-});
+    }
+  });
 }
 
 initJs();
