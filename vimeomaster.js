@@ -107,7 +107,7 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
     `Downloading ${type} segment ${i}/${segmentsUrl.length} of ${filename}`
   );
 
-  https
+  let req = https
     .get(segmentsUrl[i], res => {
       res.on("data", d => output.write(d));
 
@@ -118,6 +118,11 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
     .on("error", e => {
       cb(e);
     });
+
+  req.setTimeout(7000, function () {
+    log("⚠️", 'Timeout. Retrying');
+    combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb);
+  });
 }
 
 function getJson(url, cb) {
