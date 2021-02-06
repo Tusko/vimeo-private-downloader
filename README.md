@@ -19,7 +19,7 @@ To download videos you have to:
 
 ## Combine and convert
 
-To combine and convert video/audio parts to `mp4` file run in terminal `vimeo-combine.sh` and enjoy!
+To combine and convert video/audio parts to `mp4` file run in terminal `sh vimeo-combine.sh` and enjoy!
 
 ### Contributors
 
