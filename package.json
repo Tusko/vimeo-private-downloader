@@ -1,0 +1,27 @@
+{
+  "name": "vimeodownload",
+  "version": "1.0.0",
+  "description": "Node.js script helps you to download private videos from Vimeo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "combine": "sh vimeo-combine.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tusko/vimeo-private-downloader.git"
+  },
+  "keywords": [
+    "vimeo",
+    "private",
+    "video",
+    "download"
+  ],
+  "author": "Tusko Trush <tusko@trush.email>",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/Tusko/vimeo-private-downloader/issues"
+  },
+  "homepage": "https://github.com/Tusko/vimeo-private-downloader#readme"
+}
