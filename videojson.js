@@ -1,18 +1,13 @@
 const list = [
   {
+    name: "Beluga test",
+    url:
+      "https://33vod-adaptive.akamaized.net/exp=1612606615~acl=%2F84112832%2F%2A~hmac=e59eb3562ab8f318d99ffa8b9047fc13471414ae6a2fbb91d31963e640f8a7ff/84112832/sep/video/219068532,219068533/master.json?base64_init=1"
+  },
+  {
     name: "1. Introduction",
     url:
       "https://60vod-adaptive.akamaized.net/exp=1585642273~acl=%2F290272859%2F%2A~hmac=83af394043c1f9e24e0b1ffdd22e771c0ef2106a6a6ce4cf5e6a288dba76ceef/290272859/sep/video/1099558424,1099558420,1099557256,1099557251/master.json?base64_init=1"
-  },
-  {
-    name: "2.1. Интро",
-    url:
-      "https://117vod-adaptive.akamaized.net/exp=1585640053~acl=%2F207987916%2F%2A~hmac=9834e76445d49081a3b04c7e40f656ec256a04e1f53e7e7594d228a117f27ac0/207987916/sep/video/710158253,710158251,710158247,710158246/master.json?base64_init=1"
-  },
-  {
-    name: "2.2. Mindset",
-    url:
-      "https://120vod-adaptive.akamaized.net/exp=1585640068~acl=%2F207987919%2F%2A~hmac=b7e36ce71b8b679653141a51acbd5d8f7ca49d6c687704ad14d7c195f441dc80/207987919/sep/video/710158304,710158302,710158298,710158294/master.json?base64_init=1"
   },
   //  {
   //    name: '2.3. Точка А и точка В',

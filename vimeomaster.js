@@ -3,7 +3,6 @@ const url = require("url");
 const https = require("https");
 const log = (...args) => console.log("→", ...args);
 const list = require("./videojson.js");
-const promises = [];
 
 function loadVideo(num, cb) {
   let masterUrl = list[num].url;
@@ -11,9 +10,9 @@ function loadVideo(num, cb) {
     masterUrl += "?base64_init=1";
   }
 
-  getJson(masterUrl, (err, json) => {
+  getJson(masterUrl, num, (err, json) => {
     if (err) {
-      return cb(err);
+      cb(err);
     }
 
     const videoData = json.video
@@ -40,7 +39,7 @@ function loadVideo(num, cb) {
       list[num].name + ".m4v",
       err => {
         if (err) {
-          return cb(err);
+          cb(err);
         }
 
         processFile(
@@ -51,7 +50,7 @@ function loadVideo(num, cb) {
           list[num].name + ".m4a",
           err => {
             if (err) {
-              return cb(err);
+              cb(err);
             }
 
             cb(null, num + 1);
@@ -65,12 +64,12 @@ function loadVideo(num, cb) {
 function processFile(type, baseUrl, initData, segments, filename, cb) {
   const filePath = `./parts/${filename}`;
   const downloadingFlag = `./parts/.${filename}~`;
-  
-  if(fs.existsSync(downloadingFlag)) {
+
+  if (fs.existsSync(downloadingFlag)) {
     log("⚠️", ` ${filename} - ${type} is incomplete, restarting the download`);
   } else if (fs.existsSync(filePath)) {
     log("⚠️", ` ${filename} - ${type} already exists`);
-    return cb();
+    cb();
   } else {
     fs.writeFileSync(downloadingFlag, '');
   }
@@ -98,7 +97,7 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
   if (i >= segmentsUrl.length) {
     fs.unlinkSync(downloadingFlag);
     log("🏁", ` ${filename} - ${type} done`);
-    return cb();
+    cb();
   }
 
   log(
@@ -125,14 +124,17 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
   });
 }
 
-function getJson(url, cb) {
+function getJson(url, n, cb) {
   let data = "";
 
   https
     .get(url, res => {
-      res.on("data", d => (data += d));
-
-      res.on("end", () => cb(null, JSON.parse(data)));
+      if (res.statusCode === 200) {
+        res.on("data", d => (data += d));
+        res.on("end", () => cb(null, JSON.parse(data)));
+      } else {
+        log("⏱️", ` The master.json file is expired or crushed. Please update or remove it from the sequence (broken on ` + n + ` position)`);
+      }
     })
     .on("error", e => {
       cb(e);
@@ -145,7 +147,6 @@ function initJs(n = 0) {
   loadVideo(n, (err, num) => {
     if (err) {
       log("⚠️", ` ${err}`);
-      return;
     }
 
     if (list[num]) {
