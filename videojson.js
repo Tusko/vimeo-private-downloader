@@ -1,8 +1,8 @@
-const list = [
+module.exports = [
   {
     name: "Beluga test",
     url:
-      "https://33vod-adaptive.akamaized.net/exp=1612606615~acl=%2F84112832%2F%2A~hmac=e59eb3562ab8f318d99ffa8b9047fc13471414ae6a2fbb91d31963e640f8a7ff/84112832/sep/video/219068532,219068533/master.json?base64_init=1"
+      "https://33vod-adaptive.akamaized.net/exp=1613990546~acl=%2F84112832%2F%2A~hmac=89fbc453a492d1b13bf076b234673b590a103c049fea16801ad9fa537fb5d9b9/84112832/sep/video/219068532,219068533/master.json?base64_init=1"
   },
   {
     name: "1. Introduction",
@@ -274,5 +274,3 @@ const list = [
     url: ""
   }
 ];
-
-module.exports = list;

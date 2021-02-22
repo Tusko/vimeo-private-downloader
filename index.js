@@ -12,7 +12,7 @@ function loadVideo(num, cb) {
 
   getJson(masterUrl, num, (err, json) => {
     if (err) {
-      cb(err);
+      return cb(err);
     }
 
     const videoData = json.video
@@ -62,13 +62,14 @@ function loadVideo(num, cb) {
 }
 
 function processFile(type, baseUrl, initData, segments, filename, cb) {
-  const filePath = `./parts/${filename}`;
-  const downloadingFlag = `./parts/.${filename}~`;
+  const file = filename.replace(/[^\w.]/gi, '-');
+  const filePath = `./parts/${file}`;
+  const downloadingFlag = `./parts/.${file}~`;
 
   if (fs.existsSync(downloadingFlag)) {
-    log("⚠️", ` ${filename} - ${type} is incomplete, restarting the download`);
+    log("⚠️", ` ${file} - ${type} is incomplete, restarting the download`);
   } else if (fs.existsSync(filePath)) {
-    log("⚠️", ` ${filename} - ${type} already exists`);
+    log("⚠️", ` ${file} - ${type} already exists`);
     cb();
   } else {
     fs.writeFileSync(downloadingFlag, '');
@@ -95,9 +96,11 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
 
 function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb) {
   if (i >= segmentsUrl.length) {
-    fs.unlinkSync(downloadingFlag);
+    if (fs.existsSync(downloadingFlag)) {
+      fs.unlinkSync(downloadingFlag);
+    }
     log("🏁", ` ${filename} - ${type} done`);
-    cb();
+    return cb();
   }
 
   log(
@@ -129,15 +132,15 @@ function getJson(url, n, cb) {
 
   https
     .get(url, res => {
-      if (res.statusCode === 200) {
+      if (res.statusMessage.toLowerCase() !== 'gone') {
         res.on("data", d => (data += d));
         res.on("end", () => cb(null, JSON.parse(data)));
       } else {
-        log("⏱️", ` The master.json file is expired or crushed. Please update or remove it from the sequence (broken on ` + n + ` position)`);
+        return cb(`The master.json file is expired or crushed. Please update or remove it from the sequence (broken on ` + n + ` position)`);
       }
     })
     .on("error", e => {
-      cb(e);
+      return cb(e);
     });
 }
 
