@@ -5,10 +5,11 @@ const log = (...args) => console.log("→", ...args);
 const list = require("./videojson.js");
 
 function loadVideo(num, cb) {
-  let masterUrl = list[num].url;
-  if (!masterUrl.endsWith("?base64_init=1")) {
-    masterUrl += "?base64_init=1";
-  }
+  let rawMasterUrl = new URL(list[num].url);
+  rawMasterUrl.searchParams.delete('query_string_ranges');
+  rawMasterUrl.searchParams.set('base64_init', 1);
+
+  let masterUrl = rawMasterUrl.toString();
 
   getJson(masterUrl, num, (err, json) => {
     if (err) {
