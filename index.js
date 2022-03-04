@@ -19,18 +19,26 @@ function loadVideo(num, cb) {
     const videoData = json.video
       .sort((v1, v2) => v1.avg_bitrate - v2.avg_bitrate)
       .pop();
-    const audioData = json.audio
-      .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
-      .pop();
+
+    let audioData = {}
+    if (json.audio !== null) {
+      audioData = json.audio
+        .sort((a1, a2) => a1.avg_bitrate - a2.avg_bitrate)
+        .pop();
+    }
 
     const videoBaseUrl = url.resolve(
       url.resolve(masterUrl, json.base_url),
       videoData.base_url
     );
-    const audioBaseUrl = url.resolve(
-      url.resolve(masterUrl, json.base_url),
-      audioData.base_url
-    );
+
+    let audioBaseUrl = "";
+    if (json.audio !== null) {
+      audioBaseUrl = url.resolve(
+        url.resolve(masterUrl, json.base_url),
+        audioData.base_url
+      );
+    }
 
     processFile(
       "video",
@@ -43,20 +51,22 @@ function loadVideo(num, cb) {
           cb(err);
         }
 
-        processFile(
-          "audio",
-          audioBaseUrl,
-          audioData.init_segment,
-          audioData.segments,
-          list[num].name + ".m4a",
-          err => {
-            if (err) {
-              cb(err);
-            }
+        if (json.audio !== null) {
+          processFile(
+            "audio",
+            audioBaseUrl,
+            audioData.init_segment,
+            audioData.segments,
+            list[num].name + ".m4a",
+            err => {
+              if (err) {
+                cb(err);
+              }
 
-            cb(null, num + 1);
-          }
-        );
+              cb(null, num + 1);
+            }
+          );
+        }
       }
     );
   });
