@@ -122,6 +122,10 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
 
   let req = https
     .get(segmentsUrl[i], res => {
+      if (res.statusCode != 200) {
+        cb(new Error(`Downloading segment with url '${segmentsUrl[i]}' failed with status: ${res.statusCode} ${res.statusMessage}`))
+      }
+
       res.on("data", d => output.write(d));
 
       res.on("end", () =>
