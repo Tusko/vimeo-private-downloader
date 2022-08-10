@@ -86,7 +86,12 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
     fs.writeFileSync(downloadingFlag, '');
   }
 
-  const segmentsUrl = segments.map(seg => baseUrl + seg.url);
+  const segmentsUrl = segments.map(seg => {
+    if (!seg.url) {
+      throw new Error(`found a segment with an empty url: ${JSON.stringify(seg)}`);
+    }
+    return baseUrl + seg.url;
+  });
 
   const initBuffer = Buffer.from(initData, "base64");
   fs.writeFileSync(filePath, initBuffer);
