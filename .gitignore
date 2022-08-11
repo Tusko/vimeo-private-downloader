@@ -3,9 +3,14 @@
 # Example .gitignore files: https://github.com/github/gitignore
 /bower_components/
 /node_modules/
+package-lock.json
+yarn.lock
 
 *.m4a
 *.m4v
 *.zip
 converted/*.mp4
 combine.sh
+
+.idea
+.vscode

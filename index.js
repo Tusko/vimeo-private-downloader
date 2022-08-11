@@ -6,9 +6,6 @@ const list = require("./videojson.js");
 
 function loadVideo(num, cb) {
   let rawMasterUrl = new URL(list[num].url);
-  rawMasterUrl.searchParams.delete('query_string_ranges');
-  rawMasterUrl.searchParams.set('base64_init', 1);
-
   let masterUrl = rawMasterUrl.toString();
 
   getJson(masterUrl, num, (err, json) => {
@@ -86,7 +83,12 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
     fs.writeFileSync(downloadingFlag, '');
   }
 
-  const segmentsUrl = segments.map(seg => baseUrl + seg.url);
+  const segmentsUrl = segments.map(seg => {
+    if (!seg.url) {
+      throw new Error(`found a segment with an empty url: ${JSON.stringify(seg)}`);
+    }
+    return baseUrl + seg.url;
+  });
 
   const initBuffer = Buffer.from(initData, "base64");
   fs.writeFileSync(filePath, initBuffer);
@@ -122,6 +124,10 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
 
   let req = https
     .get(segmentsUrl[i], res => {
+      if (res.statusCode != 200) {
+        cb(new Error(`Downloading segment with url '${segmentsUrl[i]}' failed with status: ${res.statusCode} ${res.statusMessage}`))
+      }
+
       res.on("data", d => output.write(d));
 
       res.on("end", () =>
