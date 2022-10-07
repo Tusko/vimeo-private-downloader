@@ -270,7 +270,7 @@ module.exports = [
   //    url: 'https://62vod-adaptive.akamaized.net/exp=1581684969~acl=%2F261117261%2F%2A~hmac=457efdb88843a44b490f5b943aa3904fe5a330810f0f74895451d872131eec56/261117261/sep/video/960975200,960975199,960975195,960975194/master.json?base64_init=1',
   //  },
   {
-    name: "",
-    url: ""
+    name: "economy",
+    url: "https://151vod-adaptive.akamaized.net/exp=1665187977~acl=%2Fcc570c21-4eb5-4b7a-9965-f53d7c1eb436%2F%2A~hmac=35ef2e5907c187b32b578a46da4feb7e39ba5743150790da8f7f40e25f62e9bd/cc570c21-4eb5-4b7a-9965-f53d7c1eb436/sep/video/6584d310,51010861,154472c5,355911bb/audio/69bc8c1a,d24b64ea,5163d243/master.json?base64_init=1"
   }
 ];
