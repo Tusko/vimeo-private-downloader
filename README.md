@@ -22,6 +22,16 @@ To download videos you have to:
 
 To combine and convert video/audio parts to `mp4` file run in terminal `sh vimeo-combine.sh` or `npm run combine` and enjoy!
 
+## Docker configuration
+
+There is a Dockerfile available in the repository which uses Alpine image with Node 18 installed. 
+
+Several Makefile commands have been added in order to 
+- `make build`: builds `FROM node:18-alpine` Docker image installing `ffmpeg` OS dependency as well
+- `make start`: executes `npm run start` entrypoint
+- `make convert`: executes `npm run convert` entrypoint
+- `make bash`: Runs sh command in a running container
+
 ### Contributors
 
 Special thanks to contributors:
