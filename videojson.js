@@ -270,7 +270,7 @@ module.exports = [
   //    url: 'https://62vod-adaptive.akamaized.net/exp=1581684969~acl=%2F261117261%2F%2A~hmac=457efdb88843a44b490f5b943aa3904fe5a330810f0f74895451d872131eec56/261117261/sep/video/960975200,960975199,960975195,960975194/master.json?base64_init=1',
   //  },
   {
-    name: "",
-    url: ""
+    name: "ivf_training",
+    url: "https://162vod-adaptive.akamaized.net/exp=1691801971~acl=%2F37b72e5e-33d9-46a7-80a0-d1e6f600a339%2F%2A~hmac=3aa1a020034206aa08fa6b09be0a983c3cbb691b7c34e165dc443ee815990f66/37b72e5e-33d9-46a7-80a0-d1e6f600a339/sep/video/578aecc6,5c9a55a1,6ec1b8f0,a852cfce,f1be48cf/audio/19596b07,374e8b48,427be6f8/master.json?base64_init=1"
   }
 ];
