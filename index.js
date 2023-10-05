@@ -75,9 +75,9 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
   const downloadingFlag = `./parts/.${file}~`;
 
   if (fs.existsSync(downloadingFlag)) {
-    log("⚠️", ` ${file} - ${type} is incomplete, restarting the download`);
+    log("⚠️", ` ${file} - ${type} 의 다운로드가 완료되지 않았습니다. 다시 시작합니다.`);
   } else if (fs.existsSync(filePath)) {
-    log("⚠️", ` ${file} - ${type} already exists`);
+    log("⚠️", ` ${file} - ${type} 이/가 이미 존재합니다.`);
     cb();
   } else {
     fs.writeFileSync(downloadingFlag, '');
@@ -85,7 +85,7 @@ function processFile(type, baseUrl, initData, segments, filename, cb) {
 
   const segmentsUrl = segments.map(seg => {
     if (!seg.url) {
-      throw new Error(`found a segment with an empty url: ${JSON.stringify(seg)}`);
+      throw new Error(`빈 URL이 있는 세그먼트를 발견했습니다: ${JSON.stringify(seg)}`);
     }
     return baseUrl + seg.url;
   });
@@ -119,13 +119,13 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
   log(
     "📦",
     type === "video" ? "📹" : "🎧",
-    `Downloading ${type} segment ${i}/${segmentsUrl.length} of ${filename}`
+    `${filename}의 ${type} segment를 다운중입니다. 진행도 : ${i}/${segmentsUrl.length}`
   );
 
   let req = https
     .get(segmentsUrl[i], res => {
       if (res.statusCode != 200) {
-        cb(new Error(`Downloading segment with url '${segmentsUrl[i]}' failed with status: ${res.statusCode} ${res.statusMessage}`))
+        cb(new Error(`url '${segmentsUrl[i]}'에서 segment 다운 도중 실패하였습니다. 상태: ${res.statusCode} ${res.statusMessage}`))
       }
 
       res.on("data", d => output.write(d));
@@ -139,7 +139,7 @@ function combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag
     });
 
   req.setTimeout(7000, function () {
-    log("⚠️", 'Timeout. Retrying');
+    log("⚠️", '시간 초과. 재시도');
     combineSegments(type, i, segmentsUrl, output, filename, downloadingFlag, cb);
   });
 }
@@ -153,7 +153,7 @@ function getJson(url, n, cb) {
         res.on("data", d => (data += d));
         res.on("end", () => cb(null, JSON.parse(data)));
       } else {
-        return cb(`The master.json file is expired or crushed. Please update or remove it from the sequence (broken on ` + n + ` position)`);
+        return cb(`master.json 파일이 만료되었거나 손상되었습니다. 목록에서 업데이트하거나 제거해주세요.(` + n + ` 위치에서 깨짐)`);
       }
     })
     .on("error", e => {
