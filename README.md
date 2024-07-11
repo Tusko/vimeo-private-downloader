@@ -6,6 +6,10 @@ Before you start, make sure you have installed [Node.js](https://nodejs.org/en/d
 
 To check it run in terminal `node -v`. You will see `v10.11.0` for example. If you get error, install latest [Node.js](https://nodejs.org/en/download/).
 
+## Support the project
+
+[Donate](https://send.monobank.ua/jar/ABrTtpcSbR)
+
 ## Download
 
 To download videos you have to:
